@@ -7,9 +7,6 @@ class DenseNet121(DenseNet):
     def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
                  num_init_features=64, bn_size=4, drop_rate=0, num_classes=10, memory_efficient=False):
         super(DenseNet121, self).__init__()
-
-        # Linear layer
-        # self.classifier = nn.Linear(num_features, num_classes)
         
         # Each denseblock
         num_features = num_init_features
@@ -33,10 +30,17 @@ class DenseNet121(DenseNet):
         # Final batch norm
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
-        self.classifier = None
         # Linear layer
-        self.classifier1 = nn.Linear(num_features, num_classes)
-        self.classifier2 = nn.Linear(num_features, num_classes)
+        # lowerBody
+        self.classifier1 = nn.Linear(num_features, 3)
+        # upperBody
+        self.classifier2 = nn.Linear(num_features, 4)
+        # headAccessory
+        self.classifier3 = nn.Linear(num_features, 2)
+        # age
+        self.classifier4 = nn.Linear(num_features, 6)
+        # sex
+        self.classifier5 = nn.Linear(num_features, 3)
     
     def forward(self, x):
         features = self.features(x)
@@ -45,7 +49,10 @@ class DenseNet121(DenseNet):
         out = torch.flatten(out, 1)
         out1 = self.classifier1(out)
         out2 = self.classifier2(out)
-        return out1, out2
+        out3 = self.classifier3(out)
+        out4 = self.classifier4(out)
+        out5 = self.classifier5(out)
+        return out1, out2, out3, out3, out4, out5
 
 class _DenseLayer(nn.Sequential):
     def __init__(self, num_input_features, growth_rate, bn_size, drop_rate, memory_efficient=False):
