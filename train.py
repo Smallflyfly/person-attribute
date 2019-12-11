@@ -36,6 +36,8 @@ def train():
     for epoch in range(num_epochs):
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
         for index, data in enumerate(dataloader):
+            print(index, data)
+            fang[-1]
             im, label = data
             im = im.cuda()
             label = label.cuda()
