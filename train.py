@@ -1,4 +1,4 @@
-from model import DenseNet121
+from model import DenseNet121, ResNet101, resnet101_fang
 from dataset import MyDatasset
 from torch.utils.data import DataLoader
 import torch
@@ -19,9 +19,12 @@ def weights_init_kaiming(m):
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
     dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
-    print(len(dataloader))
-    print(type(dataloader))
-    net = DenseNet121()
+    # print(len(dataloader))
+    # print(type(dataloader))
+    # net = DenseNet121()
+    net = resnet101_fang(pretrained=False, progress=True)
+    print(net)
+    # fang[-1]
     if torch.cuda.is_available():
         net.cuda()
     # init weight
