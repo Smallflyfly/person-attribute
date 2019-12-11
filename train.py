@@ -18,9 +18,12 @@ def weights_init_kaiming(m):
 
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, shuffle=True, batch_size=4)
+    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
+    print(len(dataloader))
+    print(type(dataloader))
     net = DenseNet121()
-    net.cuda()
+    if torch.cuda.is_available():
+        net.cuda()
     # init weight
     net.apply(weights_init_kaiming)
     # optimizer
@@ -35,12 +38,13 @@ def train():
     writer = tb.SummaryWriter()
     for epoch in range(num_epochs):
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
-        for index, data in enumerate(dataloader):
-            print(index, data)
-            fang[-1]
-            im, label = data
-            im = im.cuda()
-            label = label.cuda()
+        # for index, data in enumerate(dataloader):
+        for data in dataloader:
+            im, label = data[0], data[1]
+            if torch.cuda.is_available():
+                im = im.cuda()
+                label = label.cuda()
+            print(im.size())
             optimizer.zero_grad()
             out1, out2, out3, out4, out5 = net(im)
             loss1 = loss_func_CEloss(out1, label[0])
@@ -54,7 +58,7 @@ def train():
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
 
-            if index%10 == 0:
+            if count_epoch%10 == 0:
                 print('------>loss {}'.format(loss))
     
     writer.close()

@@ -1,9 +1,10 @@
 import os
 import torch
 from torch.utils import data
-from torchvision import transforms
+from torchvision import transforms as T
 import cv2
 import numpy as np
+from PIL import Image
 
 class MyDatasset(data.Dataset):
     def __init__(self, data_dir, transforms=None, mode='train'):
@@ -24,6 +25,13 @@ class MyDatasset(data.Dataset):
             else:
                 filename = img[:-4]
             self.train_label.append(filename + '.txt')
+
+        self.transforms = T.Compose([
+                    T.Resize(size=(288, 144)),
+                    T.RandomHorizontalFlip(),
+                    T.ToTensor(),
+                    T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ])
         
     
     def __getitem__(self, index):
@@ -36,7 +44,7 @@ class MyDatasset(data.Dataset):
             img = self.train_data[index]
         labelfile = self.train_label[index]
         imgpath = self.imgdir + img
-        im = cv2.imread(imgpath)
+        im = Image.open(imgpath)
         labelpath = self.labdir + labelfile
         label = []
         with open(labelpath) as f:
@@ -47,7 +55,7 @@ class MyDatasset(data.Dataset):
             label.append(age.index(line[4]))
             label.append(sex.index(line[5]))
         label = np.array(label, float)
-        im = np.array(im, float)
+        im = self.transforms(im)
         return im, label
 
     def __len__(self):
