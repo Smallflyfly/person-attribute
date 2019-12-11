@@ -51,6 +51,9 @@ def train():
             optimizer.step()
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
+
+            if index%10 == 0:
+                print('------>loss {}'.format(loss))
     
     writer.close()
 
