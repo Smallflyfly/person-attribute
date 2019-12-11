@@ -31,19 +31,28 @@ def train():
     # BinCrossEntropyLoss
     loss_func_BCEloss = nn.BCELoss()
     num_epochs = 20
+    count_epoch = 0
+    writer = tb.SummaryWriter()
     for epoch in range(num_epochs):
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
         for index, data in enumerate(dataloader):
             im, label = data
             im = im.cuda()
             label = label.cuda()
-
             optimizer.zero_grad()
-
-            outputs = net(im)
-
-
-
+            out1, out2, out3, out4, out5 = net(im)
+            loss1 = loss_func_CEloss(out1, label[0])
+            loss2 = loss_func_CEloss(out2, label[1])
+            loss3 = loss_func_BCEloss(out3, label[2])
+            loss4 = loss_func_CEloss(out4, label[3])
+            loss5 = loss_func_CEloss(out5, label[4])
+            loss = loss1 + loss2 + loss3 + loss4 + loss5
+            loss.backward()
+            optimizer.step()
+            writer.add_scalar('loss',loss,count_epoch)
+            count_epoch += 1
+    
+    writer.close()
 
 
 if __name__ == "__main__":
