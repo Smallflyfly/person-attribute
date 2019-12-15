@@ -4,17 +4,7 @@ from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
 import tensorboardX as tb
-
-def weights_init_kaiming(m):
-    classname = m.__class__.__name__
-    if classname.find('Conv') != -1:
-        nn.init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
-    elif classname.find('Linear') != -1:
-        nn.init.kaiming_normal_(m.weight.data, a=0, mode='fan_out')
-        nn.init.constant_(m.bias.data, 0.0)
-    elif classname.find('BatchNorm1d') != -1:
-        nn.init.normal_(m.weight.data, 1.0, 0.02)
-        nn.init.constant_(m.bias.data, 0.0)
+import utils
 
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
@@ -23,46 +13,60 @@ def train():
     # print(type(dataloader))
     # net = DenseNet121()
     net = resnet101_fang(pretrained=False, progress=True)
-    print(net)
+    # print(net)
     # fang[-1]
     if torch.cuda.is_available():
         net.cuda()
     # init weight
-    net.apply(weights_init_kaiming)
+    net.apply(utils.weights_init_kaiming)
     # optimizer
     optimizer = torch.optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
     # CrossEntropyLoss
     loss_func_CEloss = nn.CrossEntropyLoss()
     # BinCrossEntropyLoss
-    loss_func_BCEloss = nn.BCELoss()
-    num_epochs = 20
-    count_epoch = 0
+    # loss_func_BCEloss = nn.BCELoss()
+    num_epochs = 50
     writer = tb.SummaryWriter()
     for epoch in range(num_epochs):
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
+        count_epoch = 0
         # for index, data in enumerate(dataloader):
         for data in dataloader:
-            im, label = data[0], data[1]
+            
+            im, label = data
             if torch.cuda.is_available():
                 im = im.cuda()
                 label = label.cuda()
-            print(im.size())
+            # print(im.size())
+            # print(im)
             optimizer.zero_grad()
             out1, out2, out3, out4, out5 = net(im)
-            loss1 = loss_func_CEloss(out1, label[0])
-            loss2 = loss_func_CEloss(out2, label[1])
-            loss3 = loss_func_BCEloss(out3, label[2])
-            loss4 = loss_func_CEloss(out4, label[3])
-            loss5 = loss_func_CEloss(out5, label[4])
+            loss1 = loss_func_CEloss(out1, label[:, 0])
+            loss2 = loss_func_CEloss(out2, label[:, 1])
+            print(out3)
+            print('***************')
+            print(label[:, 2])
+            loss3 = loss_func_CEloss(out3, label[:, 2])
+            print(loss3)
+            fang[-1]
+            loss4 = loss_func_CEloss(out4, label[:, 3])
+            loss5 = loss_func_CEloss(out5, label[:, 4])
             loss = loss1 + loss2 + loss3 + loss4 + loss5
             loss.backward()
             optimizer.step()
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
 
-            if count_epoch%10 == 0:
-                print('------>loss {}'.format(loss))
+            if count_epoch % 20 == 0:
+                print('{} / {} ------>loss {}'.format(count_epoch+1, len(dataloader), loss))
+                print('----------->loss1 {}'.format(loss1))
+                print('----------->loss2 {}'.format(loss2))
+                print('----------->loss3 {}'.format(loss3))
+                print('----------->loss4 {}'.format(loss4))
+                print('----------->loss5 {}'.format(loss5))
+        if (epoch+1) % 10 == 10:
+            utils.save_network(net, epoch+1)
     
     writer.close()
 

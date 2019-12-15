@@ -50,11 +50,16 @@ class MyDatasset(data.Dataset):
         with open(labelpath) as f:
             line = f.readlines()[0].strip().split(' ')
             label.append(lowerBody.index(line[1]))
+            # label.append(np.array(label1, float))
             label.append(upperBody.index(line[2]))
+            # label.append(np.array(label2, float))
             label.append(headAccessory.index(line[3]))
+            # label.append(np.array(label3, float))
             label.append(age.index(line[4]))
+            # label.append(np.array(label4, float))
             label.append(sex.index(line[5]))
-        label = np.array(label, float)
+            # label.append(np.array(label5, float))
+        label = np.array(label, int)
         im = self.transforms(im)
         return im, label
 
