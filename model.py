@@ -98,7 +98,13 @@ class ResNet101(ResNet):
         # self.fc3 = nn.Linear(512 * block.expansion, 2)
         # self.fc4 = nn.Linear(512 * block.expansion, 6)
         # self.fc5 = nn.Linear(512 * block.expansion, 3)
-        self.fc = nn.Linear(512 * block.expansion, 6)
+
+        self.fc1 = nn.Linear(512 * block.expansion, 512)
+        self.relu = nn.ReLU()
+        self.dropout = torch.nn.Dropout(0.4)
+
+        self.fc = nn.Linear(512, 6)
+
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -155,6 +161,9 @@ class ResNet101(ResNet):
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
         
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
         x = self.fc(x)
         # x1 = self.fc1(x)
         # x2 = self.fc2(x)
