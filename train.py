@@ -45,14 +45,15 @@ def train():
             # print(im.size())
             # print(im)
             optimizer.zero_grad()
-            out1, out2, out3, out4, out5 = net(im)
+            # out1, out2, out3, out4, out5 = net(im)
+            out = net(im)
             # loss1 = loss_func_CEloss(out1, label[:, 0])
             # loss2 = loss_func_CEloss(out2, label[:, 1])
             # loss3 = loss_func_CEloss(out3, label[:, 2])
-            loss4 = loss_func_CEloss(out4, label[:, 3])
+            # loss4 = loss_func_CEloss(out4, label[:, 3])
             # loss5 = loss_func_CEloss(out5, label[:, 4])
             # loss = loss1 + loss2 + loss3 + loss4 + loss5
-            loss = loss4
+            loss = loss_func_CEloss(out, label[:, 3])
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
