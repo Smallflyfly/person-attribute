@@ -8,7 +8,7 @@ import utils
 
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=32, shuffle=True)
     # print(len(dataloader))
     # print(type(dataloader))
     # net = DenseNet121()
@@ -55,8 +55,8 @@ def train():
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
 
-            if count_epoch % 1 == 0:
-                print('{} / {} ------>loss {}'.format(count_epoch+1, len(dataloader), loss))
+            if count_epoch % 10 == 0:
+                print('{} / {} ------>loss {}'.format(count_epoch, len(dataloader), loss))
                 # print('----------->loss1 {}'.format(loss1))
                 # print('----------->loss2 {}'.format(loss2))
                 # print('----------->loss3 {}'.format(loss3))
