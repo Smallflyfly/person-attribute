@@ -8,7 +8,7 @@ import utils
 
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=32, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=64, shuffle=True)
     # print(len(dataloader))
     # print(type(dataloader))
     # net = DenseNet121()
@@ -20,20 +20,23 @@ def train():
     # init weight
     net.apply(utils.weights_init_kaiming)
     # optimizer
-    optimizer = torch.optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9,
+    optimizer = torch.optim.SGD(net.parameters(), lr = 0.0001, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 15, gamma = 0.1,)
     # CrossEntropyLoss
     loss_func_CEloss = nn.CrossEntropyLoss()
     # BinCrossEntropyLoss
     # loss_func_BCEloss = nn.BCELoss()
     num_epochs = 50
+    all_count = 0
     writer = tb.SummaryWriter()
     for epoch in range(num_epochs):
+        lr_scheduler.step()
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
         count_epoch = 0
         # for index, data in enumerate(dataloader):
         for data in dataloader:
-            
+            all_count += 1
             im, label = data
             label = label.long()
             if torch.cuda.is_available():
@@ -55,8 +58,8 @@ def train():
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
 
-            if count_epoch % 10 == 0:
-                print('{} / {} ------>loss {}'.format(count_epoch, len(dataloader), loss))
+            if all_count % 10 == 0:
+                print('{} / {} ------>loss {}'.format(all_count, len(dataloader), loss))
                 # print('----------->loss1 {}'.format(loss1))
                 # print('----------->loss2 {}'.format(loss2))
                 # print('----------->loss3 {}'.format(loss3))
@@ -64,6 +67,9 @@ def train():
                 # print('----------->loss5 {}'.format(loss5))
         if (epoch+1) % 10 == 10:
             utils.save_network(net, epoch+1)
+        
+        if (epoch+1) % 10 == 0:
+            optimizer
     
     writer.close()
 
