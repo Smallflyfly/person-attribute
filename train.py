@@ -35,6 +35,7 @@ def train():
         for data in dataloader:
             
             im, label = data
+            label = label.long()
             if torch.cuda.is_available():
                 im = im.cuda()
                 label = label.cuda()
@@ -44,27 +45,23 @@ def train():
             out1, out2, out3, out4, out5 = net(im)
             loss1 = loss_func_CEloss(out1, label[:, 0])
             loss2 = loss_func_CEloss(out2, label[:, 1])
-            print(out3)
-            print('***************')
-            print(label[:, 2])
             loss3 = loss_func_CEloss(out3, label[:, 2])
-            print(loss3)
-            fang[-1]
             loss4 = loss_func_CEloss(out4, label[:, 3])
             loss5 = loss_func_CEloss(out5, label[:, 4])
-            loss = loss1 + loss2 + loss3 + loss4 + loss5
+            # loss = loss1 + loss2 + loss3 + loss4 + loss5
+            loss = loss4
             loss.backward()
             optimizer.step()
             writer.add_scalar('loss',loss,count_epoch)
             count_epoch += 1
 
-            if count_epoch % 20 == 0:
+            if count_epoch % 1 == 0:
                 print('{} / {} ------>loss {}'.format(count_epoch+1, len(dataloader), loss))
-                print('----------->loss1 {}'.format(loss1))
-                print('----------->loss2 {}'.format(loss2))
-                print('----------->loss3 {}'.format(loss3))
+                # print('----------->loss1 {}'.format(loss1))
+                # print('----------->loss2 {}'.format(loss2))
+                # print('----------->loss3 {}'.format(loss3))
                 print('----------->loss4 {}'.format(loss4))
-                print('----------->loss5 {}'.format(loss5))
+                # print('----------->loss5 {}'.format(loss5))
         if (epoch+1) % 10 == 10:
             utils.save_network(net, epoch+1)
     
