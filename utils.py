@@ -18,3 +18,24 @@ def weights_init_kaiming(m):
     elif classname.find('BatchNorm1d') != -1:
         nn.init.normal_(m.weight.data, 1.0, 0.002)
         nn.init.constant_(m.bias.data, 0.0)
+
+def load_state_dict(state_dict):
+    """
+    Because we remove the definition of fc layer in resnet now, it will fail when loading 
+    the model trained before.
+    To provide back compatibility, we overwrite the load_state_dict
+    """
+    # print(type(state_dict))
+    # print(state_dict['fc.bias'])
+    state_dict.pop('fc.bias')
+    state_dict.pop('fc.weight')
+    # print(state_dict)
+    # fang[-1]
+
+    nn.Module.load_state_dict(self, state_dict=state_dict)
+
+def load_network(network):
+    # save_path = os.path.join(model_dir,'net_%s.pth'%args.which_epoch)
+    save_path = './resnet50.pth'
+    load_state_dict(torch.load(save_path))
+    return network

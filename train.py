@@ -1,22 +1,27 @@
-from model import DenseNet121, ResNet101, resnet101_fang
+# from model import DenseNet121, ResNet101, resnet101_fang
 from dataset import MyDatasset
 from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
 import tensorboardX as tb
-import utils
+from utils import *
+from torchvision.models.resnet import *
+
 
 def train():
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_si=24, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
     # print(len(dataloader))
-    net = resnet101_fang(pretrained=False, progress=True)
-    # print(net)
-    # fang[-1]
+    # net = resnet101_fang(pretrained=False, progress=True)
+    net = resnet50(num_classes=6)
+    net.apply(weights_init_kaiming)
+    net = load_network(net)
+    print(net)
+    fang[-1]
     if torch.cuda.is_available():
         net.cuda()
     # init weight
-    net.apply(utils.weights_init_kaiming)
+    # net.apply(utils.weights_init_kaiming)
     # optimizer
     optimizer = torch.optim.SGD(net.parameters(), lr = 0.0001, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
