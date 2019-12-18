@@ -6,6 +6,7 @@ import torch.nn as nn
 import tensorboardX as tb
 from utils import *
 from torchvision.models.resnet import *
+from networks.myresnet50 import *
 
 
 def train():
@@ -13,9 +14,10 @@ def train():
     dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
-    net = resnet50(num_classes=6)
+    net = myresnet50(num_classes=6)
+    net = ResNet50()
     net.apply(weights_init_kaiming)
-    net = load_network(net)
+    net = self.load_network(net)
     print(net)
     fang[-1]
     if torch.cuda.is_available():
