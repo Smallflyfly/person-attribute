@@ -9,17 +9,17 @@ from torchvision.models.resnet import *
 from networks.myresnet50 import *
 
 
-def train():
+def train(bottleneck, layers):
     mydataset =  MyDatasset('./dataset/PETA/')
     dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
-    net = myresnet50(num_classes=6)
-    net = ResNet50()
+    # net = myresnet50(num_classes=6)
+    net = ResNet50(block=bottleneck, layers=layers, num_classes=6)
     net.apply(weights_init_kaiming)
-    net = self.load_network(net)
-    print(net)
-    fang[-1]
+    net = net.load_network(net)
+    # print(net)
+    # fang[-1]
     if torch.cuda.is_available():
         net.cuda()
     # init weight
@@ -79,7 +79,10 @@ def train():
 
 
 if __name__ == "__main__":
-    train()
+
+    layers = [3, 4, 6, 3]
+    bottleneck = Bottleneck
+    train(bottleneck, layers)
 
 
 

@@ -193,13 +193,17 @@ class ResNet50(ResNet):
 
         return x
     
-    def load_state_dict(self, model_state_dict):
+    def load_state_dict(self, state_dict):
         """
         Because we remove the definition of fc layer in resnet now, it will fail when loading 
         the model trained before.
         To provide back compatibility, we overwrite the load_state_dict
         """
-        nn.Module.load_state_dict(model_state_dict)
+        state_dict['fc.weight'] = state_dict['fc.weight'][:6,:]
+        state_dict['fc.bias'] = state_dict['fc.bias'][:6]
+        # print(state_dict['fc.weight'].size())
+
+        nn.Module.load_state_dict(self, {k: state_dict[k] for k in list(state_dict)})
         
     # print(type(state_dict))
     # print(state_dict['fc.bias'])
@@ -212,7 +216,7 @@ class ResNet50(ResNet):
     def load_network(self, network):
         # save_path = os.path.join(model_dir,'net_%s.pth'%args.which_epoch)
         save_path = './resnet50.pth'
-        self.load_state_dict(torch.load(save_path))
+        network.load_state_dict(torch.load(save_path))
         return network
 
 
@@ -236,5 +240,5 @@ def resnet50(pretrained=False, progress=True, **kwargs):
                    **kwargs)
 
 
-model = resnet50(num_classes=6)
-print(model)
+# model = resnet50(num_classes=6)
+# print(model)
