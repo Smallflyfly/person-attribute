@@ -11,14 +11,14 @@ from networks.myresnet50 import *
 
 def train(bottleneck, layers):
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=1, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
     # net = myresnet50(num_classes=6)
-    net = ResNet50(block=bottleneck, layers=layers, num_classes=6)
+    net = ResNet50(block=bottleneck, layers=layers, num_classes=2)
     net.apply(weights_init_kaiming)
     net = net.load_network(net)
-    # print(net)
+    print(net)
     # fang[-1]
     if torch.cuda.is_available():
         net.cuda()
@@ -47,6 +47,7 @@ def train(bottleneck, layers):
             if torch.cuda.is_available():
                 im = im.cuda()
                 label = label.cuda()
+            label = label.long()
             # print(im.size())
             # print(im)
             optimizer.zero_grad()
@@ -58,14 +59,17 @@ def train(bottleneck, layers):
             # loss4 = loss_func_CEloss(out4, label[:, 3])
             # loss5 = loss_func_CEloss(out5, label[:, 4])
             # loss = loss1 + loss2 + loss3 + loss4 + loss5
-            loss = loss_func_CEloss(out, label[:, 3])
+            # print(label[:, 4])
+            loss = loss_func_CEloss(out, label[:, 4])
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
             writer.add_scalar('loss',loss, all_count)
             count_epoch += 1
 
-            if count_epoch % 10 == 0 or (count_epoch+1)==len(dataloader):
+            # fang[-1]
+
+            if count_epoch % 5 == 0 or (count_epoch+1)==len(dataloader):
                 print('{} / {} ------>loss {}'.format(count_epoch, len(dataloader), loss))
                 # print('----------->loss1 {}'.format(loss1))
                 # print('----------->loss2 {}'.format(loss2))

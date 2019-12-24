@@ -188,8 +188,12 @@ class ResNet50(ResNet):
         x = self.layer4(x)
 
         x = self.avgpool(x)
+        # print(x.size())
         x = torch.flatten(x, 1)
+        # print(x.size())
         x = self.fc(x)
+        # print(x)
+        # fang[-1]
 
         return x
     
@@ -199,8 +203,8 @@ class ResNet50(ResNet):
         the model trained before.
         To provide back compatibility, we overwrite the load_state_dict
         """
-        state_dict['fc.weight'] = state_dict['fc.weight'][:6,:]
-        state_dict['fc.bias'] = state_dict['fc.bias'][:6]
+        state_dict['fc.weight'] = state_dict['fc.weight'][:2,:]
+        state_dict['fc.bias'] = state_dict['fc.bias'][:2]
         # print(state_dict['fc.weight'].size())
 
         nn.Module.load_state_dict(self, {k: state_dict[k] for k in list(state_dict)})
