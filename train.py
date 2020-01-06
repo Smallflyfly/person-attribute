@@ -11,7 +11,7 @@ from networks.myresnet50 import *
 
 def train(bottleneck, layers):
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=1, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=32, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
     # net = myresnet50(num_classes=6)
@@ -25,11 +25,12 @@ def train(bottleneck, layers):
     # init weight
     # net.apply(utils.weights_init_kaiming)
     # optimizer
-    optimizer = torch.optim.SGD(net.parameters(), lr = 0.0001, momentum = 0.9,
+    optimizer = torch.optim.SGD(net.parameters(), lr = 0.1, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 15, gamma = 0.1,)
     # CrossEntropyLoss
     loss_func_CEloss = nn.CrossEntropyLoss()
+    # loss_func_BCEloss = nn.BCELoss()
     # BinCrossEntropyLoss
     # loss_func_BCEloss = nn.BCELoss()
     num_epochs = 50
@@ -39,7 +40,7 @@ def train(bottleneck, layers):
 
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
         count_epoch = 0
-        # for index, data in enumerate(dataloader):
+        # for index, data in enumerate(dataloader):"""  """
         for data in dataloader:
             all_count += 1
             im, label = data
@@ -60,7 +61,10 @@ def train(bottleneck, layers):
             # loss5 = loss_func_CEloss(out5, label[:, 4])
             # loss = loss1 + loss2 + loss3 + loss4 + loss5
             # print(label[:, 4])
+            # print(out.size())
+            # print(label[:, 4])
             loss = loss_func_CEloss(out, label[:, 4])
+            # fang[-1]
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
@@ -77,7 +81,7 @@ def train(bottleneck, layers):
                 # print('----------->loss4 {}'.format(loss4))
                 # print('----------->loss5 {}'.format(loss5))
         if (epoch+1) % 10 == 10:
-            utils.save_network(net, epoch+1)
+            save_network(net, epoch+1)
     
     writer.close()
 

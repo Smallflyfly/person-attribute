@@ -133,7 +133,11 @@ class ResNet50(ResNet):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2,
                                        dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512 * block.expansion, num_classes)
+        self.sigmoid = nn.Sigmoid()
+        self.fc = nn.Linear(512 * block.expansion, 1024)
+        self.fc1 = nn.Linear(1024, 512)
+        self.fc2 = nn.Linear(512, num_classes)
+
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -192,6 +196,13 @@ class ResNet50(ResNet):
         x = torch.flatten(x, 1)
         # print(x.size())
         x = self.fc(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.fc1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        # x = self.sigmoid(x)
         # print(x)
         # fang[-1]
 

@@ -38,8 +38,8 @@ class MyDatasset(data.Dataset):
         lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts', 'others']
         upperBody = ['upperBodyLongSleeve', 'upperBodyNoSleeve', 'upperBodyShortSleeve', 'others']
         headAccessory = ['accessoryHat', 'others']
-        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60', 'personalLarger60', 'others']
-        sex = ['personalMale', 'personalFemale', 'others']
+        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60', 'personalLarger60']
+        sex = ['personalMale', 'personalFemale']
         if self.mode == 'train':
             img = self.train_data[index]
         labelfile = self.train_label[index]
