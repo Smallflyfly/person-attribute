@@ -214,8 +214,8 @@ class ResNet50(ResNet):
         the model trained before.
         To provide back compatibility, we overwrite the load_state_dict
         """
-        state_dict['fc.weight'] = state_dict['fc.weight'][:2,:]
-        state_dict['fc.bias'] = state_dict['fc.bias'][:2]
+        state_dict['fc.weight'] = state_dict['fc.weight'][:,:]
+        state_dict['fc.bias'] = state_dict['fc.bias'][:]
         # print(state_dict['fc.weight'].size())
 
         nn.Module.load_state_dict(self, {k: state_dict[k] for k in list(state_dict)})
