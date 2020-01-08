@@ -9,7 +9,7 @@ from networks.myresnet50 import *
 
 
 imgs = os.listdir('./samples/')
-
+net = ResNet50(block=Bottleneck, layers=[3, 4, 6, 3], num_classes=2)
 net = net.load_network(net)
 
 print(net)
