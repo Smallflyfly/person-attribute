@@ -27,13 +27,13 @@ def train(bottleneck, layers):
     # optimizer
     optimizer = torch.optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 5, gamma = 0.1,)
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 8, gamma = 0.1,)
     # CrossEntropyLoss
     loss_func_CEloss = nn.CrossEntropyLoss()
     # loss_func_BCEloss = nn.BCELoss()
     # BinCrossEntropyLoss
     # loss_func_BCEloss = nn.BCELoss()
-    num_epochs = 20
+    num_epochs = 25
     all_count = 0
     writer = tb.SummaryWriter()
     net.train(True)
@@ -56,16 +56,17 @@ def train(bottleneck, layers):
             optimizer.zero_grad()
             # out1, out2, out3, out4, out5 = net(im)
             out = net(im)
-            # loss1 = loss_func_CEloss(out1, label[:, 0])
-            # loss2 = loss_func_CEloss(out2, label[:, 1])
-            # loss3 = loss_func_CEloss(out3, label[:, 2])
-            # loss4 = loss_func_CEloss(out4, label[:, 3])
+            out1, out2, out3, out4 = out
+            loss1 = loss_func_CEloss(out1, label[:, 0])
+            loss2 = loss_func_CEloss(out2, label[:, 1])
+            loss3 = loss_func_CEloss(out3, label[:, 2])
+            loss4 = loss_func_CEloss(out4, label[:, 3])
             # loss5 = loss_func_CEloss(out5, label[:, 4])
-            # loss = loss1 + loss2 + loss3 + loss4 + loss5
+            loss = loss1 + loss2 + loss3 + loss4
             # print(label[:, 4])
             # print(out.size())
             # print(label[:, 4])
-            loss = loss_func_CEloss(out, label[:, 4])
+            # loss = loss_func_CEloss(out, label[:, 4])
             # fang[-1]
             loss.backward()
             optimizer.step()

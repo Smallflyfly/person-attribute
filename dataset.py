@@ -41,10 +41,10 @@ class MyDatasset(data.Dataset):
         
     
     def __getitem__(self, index):
-        lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts', 'others']
-        upperBody = ['upperBodyLongSleeve', 'upperBodyNoSleeve', 'upperBodyShortSleeve', 'others']
-        headAccessory = ['accessoryHat', 'others']
-        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60', 'personalLarger60']
+        lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts']
+        upperBody = ['upperBodyLongSleeve', 'upperBodyNoSleeve', 'upperBodyShortSleeve']
+        # headAccessory = ['accessoryHat', 'others']
+        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60']
         sex = ['personalMale', 'personalFemale']
         if self.mode == 'train':
             img = self.train_data[index]
@@ -59,7 +59,7 @@ class MyDatasset(data.Dataset):
             # label.append(np.array(label1, float))
             label.append(upperBody.index(line[2]))
             # label.append(np.array(label2, float))
-            label.append(headAccessory.index(line[3]))
+            # label.append(headAccessory.index(line[3]))
             # label.append(np.array(label3, float))
             label.append(age.index(line[4]))
             # label.append(np.array(label4, float))
