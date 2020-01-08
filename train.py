@@ -11,7 +11,7 @@ from networks.myresnet50 import *
 
 def train(bottleneck, layers):
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=32, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
     # net = myresnet50(num_classes=6)
@@ -25,7 +25,7 @@ def train(bottleneck, layers):
     # init weight
     # net.apply(utils.weights_init_kaiming)
     # optimizer
-    optimizer = torch.optim.SGD(net.parameters(), lr = 0.1, momentum = 0.9,
+    optimizer = torch.optim.SGD(net.parameters(), lr = 0.01, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 15, gamma = 0.1,)
     # CrossEntropyLoss
@@ -36,10 +36,12 @@ def train(bottleneck, layers):
     num_epochs = 50
     all_count = 0
     writer = tb.SummaryWriter()
+    net.train(True)
     for epoch in range(num_epochs):
 
         print('Epoch {} / {}'.format(epoch+1, num_epochs))
         count_epoch = 0
+        
         # for index, data in enumerate(dataloader):"""  """
         for data in dataloader:
             all_count += 1
@@ -67,10 +69,11 @@ def train(bottleneck, layers):
             # fang[-1]
             loss.backward()
             optimizer.step()
-            lr_scheduler.step()
+            # lr_scheduler.step()
             writer.add_scalar('loss',loss, all_count)
             count_epoch += 1
-
+        # adjust lr rate    
+        lr_scheduler.step()
             # fang[-1]
 
             if count_epoch % 5 == 0 or (count_epoch+1)==len(dataloader):
