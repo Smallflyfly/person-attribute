@@ -33,7 +33,7 @@ softmaxLayer = nn.Softmax()
 for img in imgs:
     print(img)
     im = Image.open('./samples/'+img)
-    im.show()
+    # im.show()
     # print(im.size)
     im = im.resize((144, 288), Image.ANTIALIAS)
     im = transform(im)
