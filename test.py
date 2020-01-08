@@ -9,6 +9,12 @@ from networks.myresnet50 import *
 from PIL import Image
 from torchvision import transforms as T
 
+lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts', 'others']
+upperBody = ['upperBodyLongSleeve', 'upperBodyNoSleeve', 'upperBodyShortSleeve', 'others']
+headAccessory = ['accessoryHat', 'others']
+age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60', 'personalLarger60']
+sex = ['personalMale', 'personalFemale']
+
 transform = T.Compose([
                     T.Resize(size=(288, 144)),
                     T.ToTensor(),
@@ -35,10 +41,13 @@ for img in imgs:
     if torch.cuda.is_available():
         im = im.cuda()
     out = net(im)
-    print(out)
+    # print(out)
     out = softmaxLayer(out)
-    print(out)
-    fang[-1]
+    prob = out.max(1)
+    result = sex[out.argmax(1)]
+    print(result)
+    # print(out)
+    # fang[-1]
 
 
 
