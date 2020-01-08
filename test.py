@@ -35,6 +35,8 @@ for img in imgs:
         im = im.cuda()
     out = net(im)
     print(out)
+    out = nn.Softmax(out)
+    print(out)
     fang[-1]
 
 
