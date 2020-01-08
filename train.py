@@ -11,7 +11,7 @@ from networks.myresnet50 import *
 
 def train(bottleneck, layers):
     mydataset =  MyDatasset('./dataset/PETA/')
-    dataloader = DataLoader(mydataset, batch_size=2, shuffle=True)
+    dataloader = DataLoader(mydataset, batch_size=32, shuffle=True)
     # print(len(dataloader))
     # net = resnet101_fang(pretrained=False, progress=True)
     # net = myresnet50(num_classes=6)
