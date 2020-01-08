@@ -7,6 +7,13 @@ from utils import *
 from torchvision.models.resnet import *
 from networks.myresnet50 import *
 from PIL import Image
+from torchvision import transforms as T
+
+transform = T.Compose([
+                    T.Resize(size=(288, 144)),
+                    T.ToTensor(),
+                    T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ])
 
 imgs = os.listdir('./samples/')
 net = ResNet50(block=Bottleneck, layers=[3, 4, 6, 3], num_classes=2)
@@ -16,8 +23,9 @@ print(net)
 
 for img in imgs:
     im = Image.open('./samples/'+img)
-    print(im.size)
+    # print(im.size)
     im = im.resize((144, 288), Image.ANTIALIAS)
+    im = transform(im)
     print(im.size)
     fang[-1]
 
