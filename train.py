@@ -72,8 +72,7 @@ def train(bottleneck, layers):
             # lr_scheduler.step()
             writer.add_scalar('loss',loss, all_count)
             count_epoch += 1
-        # adjust lr rate    
-        lr_scheduler.step()
+        
             # fang[-1]
 
             if count_epoch % 5 == 0 or (count_epoch+1)==len(dataloader):
@@ -83,7 +82,11 @@ def train(bottleneck, layers):
                 # print('----------->loss3 {}'.format(loss3))
                 # print('----------->loss4 {}'.format(loss4))
                 # print('----------->loss5 {}'.format(loss5))
-        if (epoch+1) % 10 == 10:
+        
+        # adjust lr rate    
+        lr_scheduler.step()
+
+        if (epoch+1) % 10 == 0:
             save_network(net, epoch+1)
     
     writer.close()
