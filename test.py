@@ -27,6 +27,8 @@ for img in imgs:
     im = im.resize((144, 288), Image.ANTIALIAS)
     im = transform(im)
     print(im.size())
+    im = im.reshape(1, im.shape[0], im.shape[1], im.shape[2])
+    print(im.size())
     fang[-1]
 
 
