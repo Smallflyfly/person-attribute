@@ -18,6 +18,8 @@ transform = T.Compose([
 imgs = os.listdir('./samples/')
 net = ResNet50(block=Bottleneck, layers=[3, 4, 6, 3], num_classes=2)
 net = net.load_network(net)
+if torch.cuda.is_available():
+    net.cuda()
 net.eval()
 print(net)
 
@@ -26,10 +28,15 @@ for img in imgs:
     # print(im.size)
     im = im.resize((144, 288), Image.ANTIALIAS)
     im = transform(im)
-    print(im.size())
+    # print(im.size()) # 3 * 288 * 144
     im = im.reshape(1, im.shape[0], im.shape[1], im.shape[2])
-    print(im.size())
+    # print(im.size()) # 1 * 3 * 288 * 144
+    if torch.cuda.is_available():
+        im = im.cuda()
+    out = net(im)
+    print(out)
     fang[-1]
+
 
 
 
