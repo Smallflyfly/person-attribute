@@ -25,15 +25,15 @@ def train(bottleneck, layers):
     # init weight
     # net.apply(utils.weights_init_kaiming)
     # optimizer
-    optimizer = torch.optim.SGD(net.parameters(), lr = 0.01, momentum = 0.9,
+    optimizer = torch.optim.SGD(net.parameters(), lr = 0.001, momentum = 0.9,
                         weight_decay = 5e-4, nesterov = True,)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 15, gamma = 0.1,)
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 5, gamma = 0.1,)
     # CrossEntropyLoss
     loss_func_CEloss = nn.CrossEntropyLoss()
     # loss_func_BCEloss = nn.BCELoss()
     # BinCrossEntropyLoss
     # loss_func_BCEloss = nn.BCELoss()
-    num_epochs = 50
+    num_epochs = 20
     all_count = 0
     writer = tb.SummaryWriter()
     net.train(True)
@@ -70,7 +70,7 @@ def train(bottleneck, layers):
             loss.backward()
             optimizer.step()
             # lr_scheduler.step()
-            writer.add_scalar('loss',loss, all_count)
+            writer.add_scalar('loss', loss, all_count)
             count_epoch += 1
         
             # fang[-1]
