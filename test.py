@@ -6,13 +6,20 @@ import torch.nn as nn
 from utils import *
 from torchvision.models.resnet import *
 from networks.myresnet50 import *
-
+from PIL import Image
 
 imgs = os.listdir('./samples/')
 net = ResNet50(block=Bottleneck, layers=[3, 4, 6, 3], num_classes=2)
 net = net.load_network(net)
-
+net.eval()
 print(net)
+
+for img in imgs:
+    im = Image.open('./samples/'+img)
+    im = im.resize((144, 288), Image.ANTIALIAS)
+    print(im.size())
+    fang[-1]
+
 
 
 def train(bottleneck, layers):

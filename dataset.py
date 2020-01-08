@@ -33,6 +33,12 @@ class MyDatasset(data.Dataset):
                     T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ])
         
+        self.transforms2 = T.Compose([
+                    T.Resize(size=(288, 144)),
+                    T.ToTensor(),
+                    T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ])
+        
     
     def __getitem__(self, index):
         lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts', 'others']
