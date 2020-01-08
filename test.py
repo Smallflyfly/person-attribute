@@ -16,6 +16,7 @@ print(net)
 
 for img in imgs:
     im = Image.open('./samples/'+img)
+    print(im.size)
     im = im.resize((144, 288), Image.ANTIALIAS)
     print(im.size)
     fang[-1]
