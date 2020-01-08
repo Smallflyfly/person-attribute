@@ -232,7 +232,8 @@ class ResNet50(ResNet):
 
     def load_network(self, network):
         # save_path = os.path.join(model_dir,'net_%s.pth'%args.which_epoch)
-        save_path = './resnet50.pth'
+        # save_path = './resnet50.pth'
+        save_path = './weights/net_10.pth'
         network.load_state_dict(torch.load(save_path))
         return network
 
