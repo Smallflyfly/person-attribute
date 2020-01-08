@@ -19,6 +19,8 @@ sex_count = [0] * 3
 for lf in files:
     with open(label_path+lf) as f:
         line = f.readline().strip().split(' ')
+        if(owerBody.index(line[1])==2):
+            print(lf)
         lowerBody_count[lowerBody.index(line[1])] += 1
         upperBody_count[upperBody.index(line[2])] += 1
         headAccessory_count[headAccessory.index(line[3])] += 1
