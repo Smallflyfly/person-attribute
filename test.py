@@ -22,6 +22,7 @@ if torch.cuda.is_available():
     net.cuda()
 net.eval()
 print(net)
+softmaxLayer = nn.Softmax()
 
 for img in imgs:
     im = Image.open('./samples/'+img)
@@ -35,7 +36,7 @@ for img in imgs:
         im = im.cuda()
     out = net(im)
     print(out)
-    out = nn.Softmax(out)
+    out = softmaxLayer(out)
     print(out)
     fang[-1]
 
