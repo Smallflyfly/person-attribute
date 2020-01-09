@@ -231,11 +231,11 @@ class ResNet50(ResNet):
         state_dict['fc1.weight'] = state_dict['fc.weight']
         state_dict['fc1.bias'] = state_dict['fc.bias']
 
-        state_dict['fc2.weight'] = torch.cat(state_dict['fc.weight'], state_dict['fc.weight'][0,:], dim=0)
-        state_dict['fc2.bias'] = torch.cat(state_dict['fc.bias'], state_dict['fc.bias'][0, :], dim=0)
+        state_dict['fc2.weight'] = torch.cat((state_dict['fc.weight'], state_dict['fc.weight'][0,:]), dim=0)
+        state_dict['fc2.bias'] = torch.cat((state_dict['fc.bias'], state_dict['fc.bias'][0, :]), dim=0)
 
-        state_dict['fc3.weight'] = torch.cat(state_dict['fc.weight'], state_dict['fc.weight'], dim=0)
-        state_dict['fc3.bias'] = torch.cat(state_dict['fc.bias'], state_dict['fc.bias'], dim=0)
+        state_dict['fc3.weight'] = torch.cat((state_dict['fc.weight'], state_dict['fc.weight']), dim=0)
+        state_dict['fc3.bias'] = torch.cat((state_dict['fc.bias'], state_dict['fc.bias']), dim=0)
 
 
         nn.Module.load_state_dict(self, {k: state_dict[k] for k in list(state_dict)})
