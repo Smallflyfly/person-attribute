@@ -230,13 +230,13 @@ class ResNet50(ResNet):
         print(state_dict['fc.weight'][0:1,:].size())
 
         print(state_dict['fc.bias'].size())
-        print(state_dict['fc.bias'][0:1, :].size())
+        print(state_dict['fc.bias'][0:1].size())
 
         state_dict['fc1.weight'] = state_dict['fc.weight']
         state_dict['fc1.bias'] = state_dict['fc.bias']
 
         state_dict['fc2.weight'] = torch.cat((state_dict['fc.weight'], state_dict['fc.weight'][0:1,:]), dim=0)
-        state_dict['fc2.bias'] = torch.cat((state_dict['fc.bias'], state_dict['fc.bias'][0:1, :]), dim=0)
+        state_dict['fc2.bias'] = torch.cat((state_dict['fc.bias'], state_dict['fc.bias'][0:1]), dim=0)
 
         state_dict['fc3.weight'] = torch.cat((state_dict['fc.weight'], state_dict['fc.weight']), dim=0)
         state_dict['fc3.bias'] = torch.cat((state_dict['fc.bias'], state_dict['fc.bias']), dim=0)
