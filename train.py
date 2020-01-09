@@ -50,7 +50,7 @@ def train(bottleneck, layers):
             if torch.cuda.is_available():
                 im = im.cuda()
                 label = label.cuda()
-            label = label.long()
+            # label = label.long()
             # print(im.size())
             # print(im)
             optimizer.zero_grad()
@@ -63,6 +63,14 @@ def train(bottleneck, layers):
             loss4 = loss_func_CEloss(out4, label[:, 3])
             # loss5 = loss_func_CEloss(out5, label[:, 4])
             loss = loss1 + loss2 + loss3 + loss4
+            print(loss1)
+            print(label[:, 0])
+            print(loss2)
+            print(label[:, 1])
+            print(loss3)
+            print(label[:, 2])
+            print(loss4)
+            print(label[:, 3])
             # print(label[:, 4])
             # print(out.size())
             # print(label[:, 4])
