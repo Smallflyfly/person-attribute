@@ -137,7 +137,7 @@ class ResNet50(ResNet):
         self.fc = nn.Linear(512 * block.expansion, num_classes) # cls for sex
         self.fc1 = nn.Linear(512 * block.expansion, 2) # cls for lowerbody
         self.fc2 = nn.Linear(512 * block.expansion, 3) # cls for upperbody
-        self.fc3 = nn.Linear(512 * block.expansion, 4) # cls for age
+        self.fc3 = nn.Linear(512 * block.expansion, 5) # cls for age
         # self.fc1 = nn.Linear(1024, 512)
         # self.fc2 = nn.Linear(512, num_classes)
 
