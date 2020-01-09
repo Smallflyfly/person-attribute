@@ -238,7 +238,7 @@ class ResNet50(ResNet):
         state_dict['fc3.bias'] = torch.cat(state_dict['fc.bias'], state_dict['fc.bias'], dim=0)
 
 
-        nn.Module.load_state_dict(self, {k: state_dict[k] for k in li           st(state_dict)})
+        nn.Module.load_state_dict(self, {k: state_dict[k] for k in list(state_dict)})
         
     # print(type(state_dict))
     # print(state_dict['fc.bias'])
