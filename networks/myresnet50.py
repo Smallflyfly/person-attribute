@@ -226,7 +226,8 @@ class ResNet50(ResNet):
         # state_dict.pop('fc.bias')
         # print(state_dict['fc.weight'].size())
 
-        print(state_dict['fc.weight'])
+        print(state_dict['fc.weight'].size())
+        print(state_dict['fc.weight'][0,:].size())
 
         state_dict['fc1.weight'] = state_dict['fc.weight']
         state_dict['fc1.bias'] = state_dict['fc.bias']
