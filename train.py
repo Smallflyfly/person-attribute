@@ -33,7 +33,7 @@ def train(bottleneck, layers):
     # loss_func_BCEloss = nn.BCELoss()
     # BinCrossEntropyLoss
     # loss_func_BCEloss = nn.BCELoss()
-    num_epochs = 25
+    num_epochs = 30
     all_count = 0
     writer = tb.SummaryWriter()
     net.train(True)
