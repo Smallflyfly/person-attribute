@@ -44,7 +44,7 @@ class MyDatasset(data.Dataset):
         lowerBody = ['lowerBodyTrousers', 'lowerBodyShorts']
         upperBody = ['upperBodyLongSleeve', 'upperBodyNoSleeve', 'upperBodyShortSleeve']
         # headAccessory = ['accessoryHat', 'others']
-        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60']
+        age = ['personalLess15', 'personalLess30', 'personalLess45', 'personalLess60', 'personalLarger60']
         sex = ['personalMale', 'personalFemale']
         if self.mode == 'train':
             img = self.train_data[index]
