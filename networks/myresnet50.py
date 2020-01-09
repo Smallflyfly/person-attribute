@@ -198,10 +198,10 @@ class ResNet50(ResNet):
         # print(x.size())
         x = torch.flatten(x, 1)
         # print(x.size())
-        x = self.fc(x)
-        x1 = self.fc1(x)
-        x2 = self.fc2(x)
-        x3 = self.fc3(x)
+        x1 = self.fc(x)
+        x2 = self.fc1(x)
+        x3 = self.fc2(x)
+        x4 = self.fc3(x)
         # x = self.bn1(x)
         # x = self.relu(x)
         # x = self.fc1(x)
@@ -212,7 +212,7 @@ class ResNet50(ResNet):
         # print(x)
         # fang[-1]
 
-        return x, x1, x2, x3
+        return x1, x2, x3, x4
     
     def load_state_dict(self, state_dict):
         """
